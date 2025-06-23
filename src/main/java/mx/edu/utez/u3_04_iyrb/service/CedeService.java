@@ -1,6 +1,5 @@
 package mx.edu.utez.u3_04_iyrb.service;
 
-import lombok.RequiredArgsConstructor;
 import mx.edu.utez.u3_04_iyrb.config.ApiResponse;
 import mx.edu.utez.u3_04_iyrb.models.Cede.Cede;
 import mx.edu.utez.u3_04_iyrb.models.Cede.CedeRepository;
@@ -32,8 +31,9 @@ public class CedeService {
     public ResponseEntity<ApiResponse> save(Cede cede) {
         if (cede.getEstado() == null || cede.getMunicipio() == null)
             return ResponseEntity.badRequest().body(new ApiResponse(null, "Estado y municipio son obligatorios", false));
+
         Cede saved = repository.save(cede);
-        // se genera clave después de guardar
+        // Segunda guardada para que se genere y persista la clave
         saved = repository.save(saved);
         return ResponseEntity.ok(new ApiResponse(saved, "Cede registrada correctamente", true));
     }

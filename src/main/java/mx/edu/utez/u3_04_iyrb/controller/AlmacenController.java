@@ -1,13 +1,11 @@
 package mx.edu.utez.u3_04_iyrb.controller;
 
-import lombok.RequiredArgsConstructor;
 import mx.edu.utez.u3_04_iyrb.models.Almacen.Almacen;
+import mx.edu.utez.u3_04_iyrb.models.AlmacenOperacion;
 import mx.edu.utez.u3_04_iyrb.service.AlmacenService;
 import mx.edu.utez.u3_04_iyrb.config.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/almacenes")
@@ -43,4 +41,18 @@ public class AlmacenController {
     public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
         return service.delete(id);
     }
+
+    @PostMapping("/comprar")
+    public ResponseEntity<ApiResponse> comprar(@RequestBody AlmacenOperacion dto) {
+        String result = service.comprarAlmacen(dto.getAlmacenId(), dto.getClienteId());
+        return ResponseEntity.ok(new ApiResponse(null, result, !result.contains("ocupado")));
+    }
+
+    @PostMapping("/rentar")
+    public ResponseEntity<ApiResponse> rentar(@RequestBody AlmacenOperacion dto) {
+        String result = service.rentarAlmacen(dto.getAlmacenId(), dto.getClienteId(), dto.getInicio(), dto.getFin());
+        return ResponseEntity.ok(new ApiResponse(null, result, !result.contains("ocupado")));
+
+    }
+
 }

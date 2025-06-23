@@ -18,7 +18,7 @@ public class Cede {
     private Long id;
 
     private String clave;
-    @NotNull
+
     private String estado;
 
     private String municipio;
@@ -28,12 +28,15 @@ public class Cede {
     private List<Almacen> almacenes;
 
 
-    @PostPersist      // se ejecuta justo después de insertarse y contar con el id
-    private void generarClave() {
-        var fecha = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
-        var random = String.format("%04d", new Random().nextInt(10_000));
-        this.clave = "C" + id + "-" + fecha + "-" + random;
+    @PostPersist
+    public void generarClave() {
+        if (this.clave == null) {
+            String fecha = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+            int random = new Random().nextInt(9000) + 1000;
+            this.clave = "C" + this.id + "-" + fecha + "-" + random;
+        }
     }
+
 
     public Long getId() {
         return id;

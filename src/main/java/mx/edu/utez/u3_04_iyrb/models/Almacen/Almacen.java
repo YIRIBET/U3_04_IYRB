@@ -23,6 +23,13 @@ public class Almacen {
 
     private BigDecimal precioRenta;
 
+    private boolean comprado = false;
+    private boolean rentado = false;
+
+    private LocalDate fechaInicioRenta;
+    private LocalDate fechaFinRenta;
+
+
     @Enumerated(EnumType.STRING)
     private Tamaño tamaño;
 
@@ -39,19 +46,20 @@ public class Almacen {
 
 
 
+
     @PrePersist
     private void inicializarFecha() {
         if (fechaRegistro == null) {
             fechaRegistro = LocalDate.now();
         }
     }
-
     @PostPersist
     private void generarClave() {
         if (clave == null && cede != null) {
             this.clave = cede.getClave() + "-A" + id;
         }
     }
+
 
     public Long getId() {
         return id;
@@ -116,4 +124,34 @@ public class Almacen {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+    public boolean getComprado() {
+        return comprado;
+    }
+
+    public void setComprado(boolean comprado) {
+        this.comprado = comprado;
+    }
+
+    public boolean getRentado() {
+        return rentado;
+    }
+
+    public void setRentado(boolean rentado) {
+        this.rentado = rentado;
+    }
+
+    public LocalDate getFechaInicioRenta() {
+        return fechaInicioRenta;
+    }
+    public void setFechaInicioRenta(LocalDate fechaInicioRenta) {
+        this.fechaInicioRenta = fechaInicioRenta;
+    }
+    public LocalDate getFechaFinRenta() {
+        return fechaFinRenta;
+    }
+    public void setFechaFinRenta(LocalDate fechaFinRenta) {
+        this.fechaFinRenta = fechaFinRenta;
+    }
+
+
 }
