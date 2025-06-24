@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 import mx.edu.utez.u3_04_iyrb.models.Almacen.Almacen;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Cliente {
@@ -11,9 +16,18 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,}$", message = "El nombre solo puede contener letras y espacios, mínimo 3 caracteres")
     private String nombreCompleto;
+    @NotBlank
+    @Pattern(regexp = "^\\d{10}$", message = "El teléfono debe tener exactamente 10 dígitos")
     private String telefono;
+    @NotBlank
+    @Email(message = "El correo debe tener un formato válido")
     private String correo;
+    @NotBlank
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número")
+    private String contraseña;
 
     // Relación Uno a Muchos con Almacen
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
@@ -52,6 +66,14 @@ public class Cliente {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 
     public List<Almacen> getAlmacenes() {

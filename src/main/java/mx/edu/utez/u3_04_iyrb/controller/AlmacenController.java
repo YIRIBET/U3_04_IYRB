@@ -6,6 +6,8 @@ import mx.edu.utez.u3_04_iyrb.service.AlmacenService;
 import mx.edu.utez.u3_04_iyrb.config.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 @RestController
 @RequestMapping("/api/almacenes")
@@ -28,12 +30,22 @@ public class AlmacenController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> save(@RequestBody Almacen almacen) {
+    public ResponseEntity<ApiResponse> save(@RequestBody @Valid Almacen almacen, BindingResult result) {
+        if (result.hasErrors()) {
+            StringBuilder errors = new StringBuilder();
+            result.getFieldErrors().forEach(e -> errors.append(e.getField()).append(": ").append(e.getDefaultMessage()).append("; "));
+            return ResponseEntity.badRequest().body(new ApiResponse(null, errors.toString(), false));
+        }
         return service.save(almacen);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> update(@PathVariable Long id, @RequestBody Almacen almacen) {
+    public ResponseEntity<ApiResponse> update(@PathVariable Long id, @RequestBody @Valid Almacen almacen, BindingResult result) {
+        if (result.hasErrors()) {
+            StringBuilder errors = new StringBuilder();
+            result.getFieldErrors().forEach(e -> errors.append(e.getField()).append(": ").append(e.getDefaultMessage()).append("; "));
+            return ResponseEntity.badRequest().body(new ApiResponse(null, errors.toString(), false));
+        }
         return service.update(id, almacen);
     }
 

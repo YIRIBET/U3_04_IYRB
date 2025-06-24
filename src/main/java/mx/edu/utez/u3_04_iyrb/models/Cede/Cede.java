@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Data
@@ -19,8 +22,12 @@ public class Cede {
 
     private String clave;
 
+    @NotBlank
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,}$", message = "El estado solo puede contener letras y espacios, mínimo 3 caracteres")
     private String estado;
 
+    @NotBlank
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,}$", message = "El municipio solo puede contener letras y espacios, mínimo 3 caracteres")
     private String municipio;
 
     @OneToMany(mappedBy = "cede")

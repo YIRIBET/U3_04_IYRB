@@ -2,6 +2,10 @@ package mx.edu.utez.u3_04_iyrb.models.Almacen;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,21 +23,29 @@ public class Almacen {
 
     private LocalDate fechaRegistro;
 
+    @NotNull
+    @Positive(message = "El precio de venta debe ser positivo")
     private BigDecimal precioVenta;
 
+    @NotNull
+    @Positive(message = "El precio de renta debe ser positivo")
     private BigDecimal precioRenta;
 
-    private boolean comprado = false;
-    private boolean rentado = false;
+    @NotNull
+    private Boolean comprado = false;
+    @NotNull
+    private Boolean rentado = false;
 
     private LocalDate fechaInicioRenta;
     private LocalDate fechaFinRenta;
 
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Tamaño tamaño;
 
 
+    @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "cede_id")
     @JsonBackReference("cede-almacen")

@@ -6,6 +6,8 @@ import mx.edu.utez.u3_04_iyrb.models.Cede.Cede;
 import mx.edu.utez.u3_04_iyrb.service.CedeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -30,12 +32,22 @@ public class CedeController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> save(@RequestBody Cede cede) {
+    public ResponseEntity<ApiResponse> save(@RequestBody @Valid Cede cede, BindingResult result) {
+        if (result.hasErrors()) {
+            StringBuilder errors = new StringBuilder();
+            result.getFieldErrors().forEach(e -> errors.append(e.getField()).append(": ").append(e.getDefaultMessage()).append("; "));
+            return ResponseEntity.badRequest().body(new ApiResponse(null, errors.toString(), false));
+        }
         return service.save(cede);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> update(@PathVariable Long id, @RequestBody Cede cede) {
+    public ResponseEntity<ApiResponse> update(@PathVariable Long id, @RequestBody @Valid Cede cede, BindingResult result) {
+        if (result.hasErrors()) {
+            StringBuilder errors = new StringBuilder();
+            result.getFieldErrors().forEach(e -> errors.append(e.getField()).append(": ").append(e.getDefaultMessage()).append("; "));
+            return ResponseEntity.badRequest().body(new ApiResponse(null, errors.toString(), false));
+        }
         return service.update(id, cede);
     }
 
